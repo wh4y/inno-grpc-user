@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { GrpcMethod } from '@nestjs/microservices';
+import { GrpcMethod, RpcException } from '@nestjs/microservices';
 import { Metadata, ServerUnaryCall } from '@grpc/grpc-js';
 import { Observable, of } from 'rxjs';
 import {
@@ -16,8 +16,12 @@ export class UserGrpcHandler implements UserGrpcService {
     metadata: Metadata,
     call: ServerUnaryCall<any, any>,
   ): Observable<IsUserExistByLoginOrEmailResponse> {
-    const result = Boolean(data.login || data.email);
+    const isRequestPayloadValid = Boolean(data.login || data.email);
 
-    return of({ result });
+    if (!isRequestPayloadValid) {
+      throw new RpcException({ code: 3, message: 'Invalid argument!' });
+    }
+
+    return of({ result: true });
   }
 }
