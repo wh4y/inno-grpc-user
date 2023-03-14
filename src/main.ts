@@ -9,7 +9,7 @@ async function bootstrap() {
       transport: Transport.GRPC,
       options: {
         package: 'user',
-        protoPath: './libs/grpc/src/proto/user/user.proto',
+        protoPath: './libs/grpc/src/user/user.proto',
       },
     },
   );
